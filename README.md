@@ -1,38 +1,87 @@
-# Healthcare Provider Fraud Detection Analysis
+# Healthcare Provider Fraud Detection
 
-## Introduction to the Case Study
-The problem is present at Kaggle as HEALTHCARE PROVIDER FRAUD DETECTION ANALYSIS.
+A self-initiated end-to-end data science case study on detecting fraudulent Medicare providers using supervised machine learning in Python.
 
-Provider Fraud is one of the biggest problems facing Medicare. According to the government, the total Medicare spending increased exponentially due to frauds in Medicare claims. Healthcare fraud is an organized crime which involves peers of providers, physicians, beneficiaries acting together to make fraud claims.
+---
 
-Rigorous analysis of Medicare data has yielded many physicians who indulge in fraud. They adopt ways in which an ambiguous diagnosis code is used to adopt costliest procedures and drugs. Insurance companies are the most vulnerable institutions impacted due to these bad practices. Due to this reason, insurance companies increased their insurance premiums and as result healthcare is becoming costly matter day by day.
+## Problem
 
-Healthcare fraud and abuse take many forms. Some of the most common types of frauds by providers are:
+Medicare fraud costs the US government billions annually. Fraudulent providers manipulate claims through tactics like billing for services never rendered, duplicate claim submission, upcoding procedures, and misrepresenting diagnoses. The goal of this project is to **predict whether a healthcare provider is potentially fraudulent** based on patterns in their inpatient, outpatient, and beneficiary claims data.
 
-a) Billing for services that were not provided.
+---
 
-b) Duplicate submission of a claim for the same service.
+## Dataset
 
-c) Misrepresenting the service provided.
+Source: [Kaggle — Healthcare Provider Fraud Detection Analysis](https://www.kaggle.com/datasets/rohitrox/healthcare-provider-fraud-detection-analysis)
 
-d) Charging for a more complex or expensive service than was actually provided.
+Three linked datasets:
 
-e) Billing for a covered service when the service actually provided was not covered.
+| Dataset | Description |
+|---|---|
+| Inpatient Claims | Claims from admitted patients — includes admission/discharge dates, diagnosis codes |
+| Outpatient Claims | Claims from non-admitted patients visiting hospitals |
+| Beneficiary Details | Patient KYC data — health conditions, demographics, region |
 
-## Problem Statement
-The goal of this project is to predict the potentially fraudulent providers based on the claims filed by them.along with this, we will also discover important variables helpful in detecting the behaviour of potentially fraud providers. Further, we will study fraudulent patterns in the provider's claims to understand the future behaviour of providers.
+The datasets are joined on provider and beneficiary IDs to build a unified feature set per provider.
 
-## DataSet Description
-Introduction to the Dataset For the purpose of this project, we are considering Inpatient claims, Outpatient claims and Beneficiary details of each provider. Lets see their details :
+---
 
-### A) Inpatient Data
+## Approach
 
-This data provides insights about the claims filed for those patients who are admitted in the hospitals. It also provides additional details like their admission and discharge dates and admit diagnosis code.
+### 1. Exploratory Data Analysis (`EDA_Frauds.ipynb`)
+- Distribution analysis of claim amounts, diagnosis codes, and procedure codes
+- Correlation between chronic conditions and fraud labels
+- Visualising patterns in admission duration, reimbursement amounts, and physician involvement
 
-### B) Outpatient Data
+### 2. Feature Engineering (`Self_Case_Study_1.ipynb`)
+- Aggregated provider-level features: total claims, average reimbursement, number of unique patients, physicians, and diagnosis codes
+- Derived features: claim duration, age from DOB/DOD, chronic condition flags
+- Merged inpatient and outpatient data into a single provider-level feature matrix
 
-This data provides details about the claims filed for those patients who visit hospitals and not admitted in it.
+### 3. Modelling
+Binary classification: `PotentialFraud = Yes / No`
 
-### C) Beneficiary Details Data
+Models evaluated:
+- Logistic Regression (baseline)
+- Decision Tree
+- Random Forest
+- Gradient Boosted Trees (XGBoost)
 
-This data contains beneficiary KYC details like health conditions,region they belong to etc.
+Evaluation metrics: Precision, Recall, F1-score, ROC-AUC (prioritising Recall — missing a fraudulent provider is costly)
+
+---
+
+## Tech Stack
+
+- **Python 3** — pandas, NumPy, scikit-learn, matplotlib, seaborn
+- **Jupyter Notebook** — EDA and modelling
+- **Git** — version control
+
+---
+
+## Key Findings
+
+- Providers with a high number of unique physicians per claim and unusually short inpatient durations showed strong correlation with fraud labels
+- Chronic condition combinations (renal disease + depression) appeared disproportionately in fraudulent claims
+- Random Forest and Gradient Boosting significantly outperformed the Logistic Regression baseline on Recall
+
+---
+
+## Files
+
+| File | Description |
+|---|---|
+| `EDA_Frauds.ipynb` | Exploratory data analysis and visualisations |
+| `Self_Case_Study_1.ipynb` | Feature engineering, model training, and evaluation |
+| `EDA_Frauds.pdf` | PDF export of EDA notebook |
+| `Healthcare Provider Fraud Detection Analysis.pdf` | Full case study report |
+
+---
+
+## Why This Project
+
+Fraud detection is a pattern-recognition problem at its core — the same principles (anomaly signals in structured data, imbalanced classification, feature aggregation across relational tables) apply directly to financial data, investment risk, and portfolio analytics. This case study was self-initiated to develop intuition for data-heavy, high-stakes classification problems.
+
+---
+
+*Part of a broader portfolio of ML case studies: [Applied AI Assignments & Case Studies](https://github.com/swaticsharma29/Applied-AI-Assignments-Case-Studies)*
